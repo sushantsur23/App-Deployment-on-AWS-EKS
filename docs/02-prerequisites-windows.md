@@ -2,6 +2,8 @@
 
 ## Sections:
 
+Open the powershell in administrator mode and follow the below steps.
+
 #### Install kubectl and verify as per the documentation
 
 Follow the documentation page at https://docs.aws.amazon.com/eks/latest/eksctl/installation.html Go to the windows section download the .zip file RUn the .exe file downloaded.

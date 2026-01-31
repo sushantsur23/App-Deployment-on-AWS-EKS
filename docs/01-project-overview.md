@@ -20,7 +20,9 @@ This mirrors how production-grade applications are deployed in modern cloud envi
 
 ##### ☸️ What is Amazon EKS?
 
-Amazon EKS (Elastic Kubernetes Service) is a managed Kubernetes control plane provided by AWS. Best way is to atleast keep 3 worker and master nodes in Data and Control Plane to set up highly available kubernetes cluster.
+Amazon EKS (Elastic Kubernetes Service) is a managed Kubernetes control plane but not data plane provided by AWS. Best way is to atleast keep 3 worker and master nodes in Data and Control Plane to set up highly available kubernetes cluster.
+
+AWS Fargate here will take care of the worker node. If I use EC2 instances for worker nodes then I need to manage the high availability of it separately or manually. If i dont want to go ahead with AWS EKS then i can also use create virtual machines use kops or kubeadm and install kubernetes over that but however the challenges are higher to manage everything manually there thats why we do ahead with EKS since AWS makes our life easier here.
 
 A typical Kubernetes cluster has two main parts:
 
@@ -282,6 +284,22 @@ To create AWS resources (ALB, target groups, security groups), it must call AWS 
 With the kubernete cluster we can integrate identity providers as octa, kclog etc. Identity provider as LDAP where I can created all the users of our organization and we can attach it to multiple other things leading to login with facebook, login with google etc. we  add identity provider to identity broker. Here aws helps to attach any identity providers. 
 
 If I’m not using identity provider there is no way to give access to the pod. 
+
+To create AWS resources (ALB, target groups, security groups), it must call AWS APIs.
+
+Instead of embedding credentials, we use:
+
+IAM Roles for Service Accounts (IRSA)
+
+This allows:
+
+* A Kubernetes service account to assume an IAM role
+
+* Secure, temporary AWS credentials
+
+* Fine-grained permission control
+
+To enable this, we associate an OIDC identity provider with the EKS cluster. This is a key security concept in production EKS environments.
 
 #### 🏗 Final Architecture of This Project
 
