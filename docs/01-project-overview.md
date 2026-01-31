@@ -85,7 +85,7 @@ Example production setup:
 
 These nodes live inside a VPC private subnet for security.
 
-#  VPC Network Design
+#####  VPC Network Design
 
 | Component      | Location               | Purpose                    |
 | -------------- | ---------------------- | -------------------------- |
@@ -96,7 +96,7 @@ These nodes live inside a VPC private subnet for security.
 ✔ Applications never run in public subnets
 ✔ Only load balancers are publicly exposed
 
-##### Why Fargate is used??
+### Why Fargate is used??
 
 Instead of managing EC2 worker nodes, we use Fargate, which:
 
@@ -109,7 +109,7 @@ Instead of managing EC2 worker nodes, we use Fargate, which:
 This creates a fully serverless Kubernetes data plane, ideal for learning modern cloud-native patterns.
 
 
-##### 🌐 Why We Use Ingress Instead of LoadBalancer Services
+### 🌐 Why We Use Ingress Instead of LoadBalancer Services
 
 If every application used a LoadBalancer service: Each service would create a separate AWS load balancer, Costs would increase significantly and Management becomes complex.
 
@@ -127,7 +127,7 @@ Centralized traffic management
 
 However, Ingress needs a component to actually create and manage the load balancer. That’s where the Ingress Controller comes in.
 
-##### What is AWS Load Balancer Controller
+### What is AWS Load Balancer Controller
 
 The AWS Load Balancer Controller is a Kubernetes controller that:
 
@@ -144,7 +144,7 @@ This removes all manual load balancer configuration. Whenever we create an Ingre
 This file is theory + architecture understanding.
 
 
-##### 📦 Application Deployment (Pods)
+### 📦 Application Deployment (Pods)
 
 Applications are deployed as Pods inside the worker nodes.
 
@@ -190,7 +190,7 @@ Each service = one load balancer
 
 ❗ Expensive at scale
 
-##### 💰 Problem with LoadBalancer per Service
+### 💰 Problem with LoadBalancer per Service
 
 If every microservice uses: type: LoadBalancer Then:
 
@@ -202,7 +202,7 @@ If every microservice uses: type: LoadBalancer Then:
 
 This is not optimal for production microservices.
 
-##### 🚪 Solution: Kubernetes Ingress
+### 🚪 Solution: Kubernetes Ingress
 
 Instead of multiple load balancers, we use Ingress.
 
@@ -212,7 +212,7 @@ Ingress: Exposes multiple services using one load balancer
 
 Routes traffic based on: Hostname and URL path.
 
-##### 🎯 Ingress Flow
+### 🎯 Ingress Flow
 
 ```
 User → AWS Load Balancer → Ingress → Service → Pod
@@ -227,7 +227,7 @@ User → AWS Load Balancer → Ingress → Service → Pod
 
 5) Service routes to Pod
 
-##### ⚙️ Ingress Controller
+### ⚙️ Ingress Controller
 
 Ingress alone is just a Kubernetes resource. It needs a controller to function.
 
@@ -238,7 +238,7 @@ Common Ingress Controllers
 | **AWS ALB Controller** | AWS            |
 | **F5 Ingress**         | F5 Networks    |
 
-##### ☁️ AWS Load Balancer Controller (ALB Controller)
+### ☁️ AWS Load Balancer Controller (ALB Controller)
 
 When an Ingress resource is created:
 
@@ -258,7 +258,7 @@ When an Ingress resource is created:
 
 This enables internet access to private cluster workloads securely.
 
-##### 🧩 Why Ingress is Best Practice
+### 🧩 Why Ingress is Best Practice
 
 | Feature          | LoadBalancer Service | Ingress           |
 | ---------------- | -------------------- | ----------------- |
@@ -267,7 +267,7 @@ This enables internet access to private cluster workloads securely.
 | Routing          | None                 | Host & Path based |
 | Production ready | ❌                    | ✅                 |
 
-##### 🔐 Why IAM OIDC Integration Is Required
+### 🔐 Why IAM OIDC Integration Is Required
 
 The Load Balancer Controller is itself a Kubernetes pod.
 To create AWS resources (ALB, target groups, security groups), it must call AWS APIs.
