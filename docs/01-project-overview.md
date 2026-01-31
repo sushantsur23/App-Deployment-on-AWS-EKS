@@ -6,15 +6,15 @@ This project demonstrates how to deploy a real-world containerized application o
 
 By completing this project, you will understand:
 
-How EKS simplifies Kubernetes operations
+* How EKS simplifies Kubernetes operations
 
-How applications run inside pods and services
+* How applications run inside pods and services
 
-Why Ingress is required for external access
+* Why Ingress is required for external access
 
-How the AWS Load Balancer Controller automatically provisions ALBs
+* How the AWS Load Balancer Controller automatically provisions ALBs
 
-How Kubernetes workloads can securely interact with AWS services using IAM
+* How Kubernetes workloads can securely interact with AWS services using IAM
 
 This mirrors how production-grade applications are deployed in modern cloud environments, however in production there might be minimal changes as per the project requirements.
 
@@ -31,13 +31,13 @@ A typical Kubernetes cluster has two main parts:
 
 Managing a self-hosted Kubernetes cluster means you must:
 
-Maintain the control plane
+* Maintain the control plane
 
-Handle etcd failures
+* Handle etcd failures
 
-Renew certificates
+* Renew certificates
 
-Upgrade Kubernetes versions
+* Upgrade Kubernetes versions
 
 Troubleshoot API server or scheduler issues
 
@@ -47,17 +47,17 @@ This becomes operationally heavy and error-prone.
 
 EKS removes this burden by fully managing the control plane for you. The EKS cluster is designed following high-availability and production best practices. AWS ensures:
 
-High availability of API server
+* High availability of API server
 
-Automatic recovery of control plane components
+* Automatic recovery of control plane components
 
-Managed upgrades and patches
+* Managed upgrades and patches
 
 You only focus on deploying applications, not managing Kubernetes internals
 
-Control Plane (Managed by AWS)
+* Control Plane (Managed by AWS)
 
-EKS provides a managed control plane
+* EKS provides a managed control plane
 
 Internally distributed across multiple Availability Zones
 
@@ -119,11 +119,11 @@ Ingress Solves This :- Ingress acts like a smart traffic router.
 User → Load Balancer → Ingress Rules → Service → Pods
 ```
 It allows: 
-One load balancer for multiple services
+* One load balancer for multiple services
 
-Path-based routing (e.g., /app1, /app2)
+* Path-based routing (e.g., /app1, /app2)
 
-Centralized traffic management
+* Centralized traffic management
 
 However, Ingress needs a component to actually create and manage the load balancer. That’s where the Ingress Controller comes in.
 
@@ -131,11 +131,11 @@ However, Ingress needs a component to actually create and manage the load balanc
 
 The AWS Load Balancer Controller is a Kubernetes controller that:
 
-Watches for new Ingress resources
+* Watches for new Ingress resources
 
-Automatically creates an AWS Application Load Balancer
+* Automatically creates an AWS Application Load Balancer
 
-Configures: Target groups, Listener rules, Health checks, 
+* Configures: Target groups, Listener rules, Health checks, 
 
 Routes traffic from ALB → Service → Pods
 
@@ -174,19 +174,19 @@ Used for internal microservice communication
 
 🔹 NodePort
 
-Exposes service on each worker node IP
+* Exposes service on each worker node IP
 
-Still inside the VPC
+* Still inside the VPC
 
 Not directly internet-facing unless manually routed
 
 🔹 LoadBalancer
 
-Creates an AWS ELB/ALB
+* Creates an AWS ELB/ALB
 
-Assigns a public IP / DNS
+* Assigns a public IP / DNS
 
-Each service = one load balancer
+* Each service = one load balancer
 
 ❗ Expensive at scale
 
@@ -206,7 +206,7 @@ This is not optimal for production microservices.
 
 Instead of multiple load balancers, we use Ingress.
 
-What Ingress Does
+What Ingress Does?
 
 Ingress: Exposes multiple services using one load balancer
 
@@ -284,3 +284,25 @@ This allows:
 3) Fine-grained permission control
 
 To enable this, we associate an OIDC identity provider with the EKS cluster. This is a key security concept in production EKS environments. 
+
+#### 🏗 Final Architecture of This Project
+
+```
+User (Browser)
+      │
+      ▼
+AWS Application Load Balancer (Public Subnet)
+      │
+      ▼
+Kubernetes Ingress Resource
+      │
+      ▼
+Kubernetes Service
+      │
+      ▼
+Pods running on AWS Fargate (Private Subnets)
+      │
+      ▼
+Amazon EKS Cluster (Managed Control Plane)
+
+```
