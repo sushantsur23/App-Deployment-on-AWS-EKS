@@ -96,6 +96,10 @@ These nodes live inside a VPC private subnet for security.
 ✔ Applications never run in public subnets
 ✔ Only load balancers are publicly exposed
 
+The whole master and worker place will be within VPC with public and private subnet. Application are always deployed on private subnet. 
+
+In nodeport mode people who has access to the private subnet only can access the application. So we will need a load balancer who should have access or a public ip address like elastic iP address is needed. 
+
 ### Why Fargate is used??
 
 Instead of managing EC2 worker nodes, we use Fargate, which:
@@ -111,7 +115,7 @@ This creates a fully serverless Kubernetes data plane, ideal for learning modern
 
 ### 🌐 Why We Use Ingress Instead of LoadBalancer Services
 
-If every application used a LoadBalancer service: Each service would create a separate AWS load balancer, Costs would increase significantly and Management becomes complex.
+If every application used a LoadBalancer service: Each service would create a separate AWS load balancer, Costs would increase significantly and Management becomes complex. Ingress can support cluster ip mode and nodeport mode both. Ingress here allows the customer to access the application inside the eks cluster, helps to route the traffic inside eks cluster. We will write the ingress.yaml file allow the user to access the application on example.com/avvnb
 
 Ingress Solves This :- Ingress acts like a smart traffic router.
 
@@ -158,7 +162,10 @@ Pods:
 
 🔌 Kubernetes Service Types
 
-Services expose Pods and provide stable networking.
+Services expose Pods and provide stable networking. Service gives me 3 options or modes 
+1) I can use the cluster ip model 
+2) we can expose the service to the node level using nodeport mode, here pod or the application deployed can be accessed from any of the cluster IP from master place 
+3) we can expose it using load balancer mode.  
 
 | Type             | Scope               | Use Case                         |
 | ---------------- | ------------------- | -------------------------------- |
@@ -272,18 +279,9 @@ This enables internet access to private cluster workloads securely.
 The Load Balancer Controller is itself a Kubernetes pod.
 To create AWS resources (ALB, target groups, security groups), it must call AWS APIs.
 
-Instead of embedding credentials, we use:
-IAM Roles for Service Accounts (IRSA)
+With the kubernete cluster we can integrate identity providers as octa, kclog etc. Identity provider as LDAP where I can created all the users of our organization and we can attach it to multiple other things leading to login with facebook, login with google etc. we  add identity provider to identity broker. Here aws helps to attach any identity providers. 
 
-This allows:
-
-1) A Kubernetes service account to assume an IAM role
-
-2) Secure, temporary AWS credentials
-
-3) Fine-grained permission control
-
-To enable this, we associate an OIDC identity provider with the EKS cluster. This is a key security concept in production EKS environments. 
+If I’m not using identity provider there is no way to give access to the pod. 
 
 #### 🏗 Final Architecture of This Project
 
