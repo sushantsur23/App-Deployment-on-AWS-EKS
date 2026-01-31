@@ -1,24 +1,33 @@
-Step-by-step tool installation (Windows PowerShell).
+# Step-by-step tool installation (Windows PowerShell).
 
-Sections:
+## Sections:
 
-Install kubectl
+#### Install kubectl and verify as per the documentation
 
-Install eksctl
+Follow the documentation page at https://docs.aws.amazon.com/eks/latest/eksctl/installation.html Go to the windows section download the .zip file RUn the .exe file downloaded.
 
-Install AWS CLI
+##### Install eksctl and verify as per the documentation
 
-Configure AWS CLI (aws configure) 
+Follow the documentation page https://kubernetes.io/docs/tasks/tools/install-kubectl-windows/ CLick on the link mentioned as "Install on Windows using Chocolatey, Scoop or Winget.
 
-Kubernetes End to End project o…
+Verify the installation using the below command.
+```
+kubectl version --client
+```
 
-Verify installations
+#### Install AWS CLI and verify as per the documentation
 
-Add verification commands:
+Follow the documentation page https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html  
 
-Client Version: v1.35.0
-Kustomize Version: v5.7.1
-0.221.0
-aws-cli/2.31.34 Python/3.13.9 Windows/11 exe/AMD64
+Go to windows section, Download the link to .msi file and run it for complete installation.
+Finally you can also verify the installation by using the command "aws configure".
+
+#### Install Helm and verify as per the documentation
+
+Follow the documentation page https://helm.sh/docs/v2/using_helm/install/ and use the below command on powershell.
+
+```
+scoop install helm
+```
 
 
